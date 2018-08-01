@@ -5,8 +5,10 @@
   "main": "index.js",
   "dependencies": {
     "express": "^4.16.3",
+    "fawn": "^2.1.5",
     "helmet": "^3.13.0",
     "joi": "^13.4.0",
+    "joi-objectid": "^2.0.0",
     "mongoose": "^5.2.6"
   },
   "devDependencies": {

@@ -7,12 +7,14 @@ const Customer = mongoose.model('Customer', mongoose.Schema({
     required: true,
     minlength: 2,
     maxLength: 30,
+    trim: true,
   },
   phone: {
     type: String,
     required: true,
     minlength: 5,
     maxLength: 15,
+    trim: true,
   },
   isGold: {
     type: Boolean,
