@@ -1,11 +1,15 @@
 const _ = require('lodash');
-const jwt = require('jsonwebtoken');
-const config = require('config');
 const bcrypt = require('bcrypt');
 const express = require('express');
+const auth = require('../middleware/auth');
 const { User, validate, validatePassword } = require('../models/user');
 
 const router = express.Router();
+
+router.get('/me', auth, async (req, res) => {
+  const user = await User.findById(req.user._id).select({ password: 0 });
+  return res.send(user);
+});
 
 router.post('/', async (req, res) => {
   let user = await User.findOne({ email: req.body.email });
@@ -17,12 +21,11 @@ router.post('/', async (req, res) => {
   const password = validatePassword(req.body.password);
   if (password.error) return res.status(400).send(password.error.details[0].message);
 
-
   user = new User(_.pick(req.body, ['name', 'email', 'password']));
   const salt = await bcrypt.genSalt(10);
   user.password = await bcrypt.hash(req.body.password, salt);
   await user.save();
-  const token = jwt.sign({ _id: user._id }, config.get('jwtPrivateKey'));
+  const token = user.generateAuthToken();
   return res.header('x-auth-token', token).send(_.pick(user, ['_id', 'name', 'email']));
 });
 

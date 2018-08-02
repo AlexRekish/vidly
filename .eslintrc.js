@@ -3,5 +3,9 @@ module.exports = {
     rules: {
       'no-underscore-dangle': 'off',
       'no-plusplus': 'off',
+      'func-names': 'off',
+      'consistent-return': 'off',
+      'no-console': 'off',
+      'global-require': 'off'
     }
 };
