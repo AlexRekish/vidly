@@ -7,5 +7,8 @@ module.exports = {
       'consistent-return': 'off',
       'no-console': 'off',
       'global-require': 'off'
+    },
+    "env": {
+      "jest": true
     }
 };

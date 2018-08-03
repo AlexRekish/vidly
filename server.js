@@ -8,6 +8,8 @@ require('./startups/db')();
 require('./startups/config')();
 require('./startups/validation')();
 
-app.listen(3502, () => {
+const server = app.listen(3502, () => {
   winston.info('Listening on port 3502...');
 });
+
+module.exports = server;

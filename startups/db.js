@@ -1,7 +1,9 @@
 const mongoose = require('mongoose');
 const winston = require('winston');
+const config = require('config');
 
 module.exports = () => {
-  mongoose.connect('mongodb://localhost:27017/Vidly', { useNewUrlParser: true })
-    .then(() => winston.info('Connected to Mongo...'));
+  const db = config.get('db');
+  mongoose.connect(db, { useNewUrlParser: true })
+    .then(() => winston.info(`Connected to ${db}...`));
 };
