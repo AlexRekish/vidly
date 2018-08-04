@@ -8,7 +8,9 @@ require('./startups/db')();
 require('./startups/config')();
 require('./startups/validation')();
 
-const server = app.listen(3502, () => {
+const port = process.env.PORT || 3502;
+
+const server = app.listen(port, () => {
   winston.info('Listening on port 3502...');
 });
 
