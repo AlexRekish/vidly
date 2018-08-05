@@ -8,14 +8,14 @@ const Rental = mongoose.model('Rental', mongoose.Schema({
         type: String,
         required: true,
         minlength: 2,
-        maxLength: 30,
+        maxlength: 30,
         trim: true,
       },
       phone: {
         type: String,
         required: true,
         minlength: 5,
-        maxLength: 15,
+        maxlength: 15,
         trim: true,
       },
       isGold: {
@@ -31,7 +31,7 @@ const Rental = mongoose.model('Rental', mongoose.Schema({
         type: String,
         required: true,
         minlength: 2,
-        maxLength: 50,
+        maxlength: 50,
         trim: true,
       },
       dailyRentalRate: {
