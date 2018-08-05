@@ -4,6 +4,7 @@ const { Genre } = require('../models/genre');
 const auth = require('../middleware/auth');
 const validateObjectId = require('../middleware/validateObjectId');
 const admin = require('../middleware/admin');
+const validator = require('../middleware/validate');
 
 const router = express.Router();
 
@@ -19,11 +20,7 @@ router.get('/:id', async (req, res) => {
   return res.send(movie);
 });
 
-router.post('/', auth, async (req, res) => {
-  const { error } = validate(req.body);
-  if (error) {
-    return res.status(400).send(error.details[0].message);
-  }
+router.post('/', [auth, validator(validate)], async (req, res) => {
   const genre = await Genre.findById(req.body.genreId);
   if (!genre) return res.status(400).send('Invalid genre!');
 
@@ -40,10 +37,7 @@ router.post('/', auth, async (req, res) => {
   return res.send(movie);
 });
 
-router.put('/:id', [auth, admin, validateObjectId], async (req, res) => {
-  const { error } = validate(req.body);
-  if (error) return res.status(400).send(error.details[0].message);
-
+router.put('/:id', [auth, admin, validateObjectId, validator(validate)], async (req, res) => {
   const genre = Genre.findById(req.body.genreId);
   if (!genre) return res.status(400).send('Invalid genre');
 

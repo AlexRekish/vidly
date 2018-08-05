@@ -6,6 +6,7 @@ const { Movie } = require('../models/movie');
 const { Customer } = require('../models/customer');
 const auth = require('../middleware/auth');
 const admin = require('../middleware/admin');
+const validator = require('../middleware/validate');
 
 const router = express.Router();
 Fawn.init(mongoose);
@@ -15,10 +16,7 @@ router.get('/', [auth, admin], async (req, res) => {
   return res.send(rentals);
 });
 
-router.post('/', auth, async (req, res) => {
-  const { error } = validate(req.body);
-  if (error) return res.status(400).send(error.details[0].message);
-
+router.post('/', [auth, validator(validate)], async (req, res) => {
   const movie = await Movie.findById(req.body.movieId);
   if (!movie) return res.status(400).send('Invalid movie');
 

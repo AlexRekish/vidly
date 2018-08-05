@@ -3,6 +3,7 @@ const bcrypt = require('bcrypt');
 const express = require('express');
 const auth = require('../middleware/auth');
 const { User, validate, validatePassword } = require('../models/user');
+const validator = require('../middleware/validate');
 
 const router = express.Router();
 
@@ -11,12 +12,9 @@ router.get('/me', auth, async (req, res) => {
   return res.send(user);
 });
 
-router.post('/', async (req, res) => {
+router.post('/', validator(validate), async (req, res) => {
   let user = await User.findOne({ email: req.body.email });
   if (user) return res.status(400).send('User already registered');
-
-  const { error } = validate(req.body);
-  if (error) return res.status(400).send(error.details[0].message);
 
   const password = validatePassword(req.body.password);
   if (password.error) return res.status(400).send(password.error.details[0].message);
