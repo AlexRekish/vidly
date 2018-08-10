@@ -1,12 +1,25 @@
 import React from 'react';
+import Like from '../../Common/Like/Like';
 
 const movie = (props) => {
+  const {
+    title,
+    genre,
+    numberInStock: stock,
+    dailyRentalRate: rate
+  } = props.movie;
   return (
     <tr>
-      <td>{props.title}</td>
-      <td>{props.genre}</td>
-      <td>{props.stock}</td>
-      <td>{props.rate}</td>
+      <td>{title}</td>
+      <td>{genre.name}</td>
+      <td>{stock}</td>
+      <td>{rate}</td>
+      <td>
+        <Like
+          onLike={props.onLike}
+          liked={props.liked}
+        />
+      </td>
       <td>
         <button
           onClick={props.delete}
