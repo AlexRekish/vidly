@@ -4,6 +4,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'font-awesome/css/font-awesome.min.css';
 import { getMovies } from './services/fakeMovieService';
 import Movies from './components/Movies/Movies';
+import paginate from './utils/paginate';
 
 const movies = getMovies().map(movie => {
   return { ...movie, liked: false };
@@ -12,7 +13,8 @@ const movies = getMovies().map(movie => {
 class App extends Component {
   state = {
     movies,
-    pageSize: 4
+    pageSize: 4,
+    currentPage: 1,
   }
   deleteMovieHandler = (id) => {
     const updatedMovies = this.state.movies.slice();
@@ -28,8 +30,8 @@ class App extends Component {
     this.setState({ movies: updatedMovies });
   }
 
-  pageChangeHadler = () => {
-    console.log('Page changed');
+  pageChangeHandler = (page) => {
+    this.setState({ currentPage: page });
   }
 
   checkNumberOfMovies = () => {
@@ -38,7 +40,8 @@ class App extends Component {
   };
 
   render() {
-    const { movies, pageSize } = this.state;
+    const { movies: allMovies, pageSize, currentPage } = this.state;
+    const movies = paginate(allMovies, currentPage, pageSize);
     return (
       <main className="container">
         <Movies
@@ -46,9 +49,10 @@ class App extends Component {
           movies={movies}
           deleteMovie={this.deleteMovieHandler}
           onLike={this.likeMovieHandler}
-          itemCount={movies.length}
+          itemCount={allMovies.length}
           pageSize={pageSize}
-          onPageChanged={this.pageChangeHadler}
+          onPageChanged={this.pageChangeHandler}
+          currentPage={currentPage}
         />
       </main>
     );

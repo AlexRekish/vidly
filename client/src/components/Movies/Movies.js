@@ -1,19 +1,21 @@
 import React from "react";
+import PropTypes from 'prop-types';
 import Movie from "./Movie/Movie";
 import Pagination from '../Common/Pagination/Pagination';
 
-
-const movies = props => (
+const movies = props => {
+  const {count, deleteMovie, onLike, itemCount, pageSize, onPageChanged, currentPage, movies} = props;
+  return (
   <React.Fragment>
-    {props.count}
+    {count}
     <table className="table">
       <tbody>
-        {props.movies.map(movie => (
+        {movies.map(movie => (
           <Movie
             movie={movie}
             key={movie._id}
-            delete={() => props.deleteMovie(movie._id)}
-            onLike={() => props.onLike(movie._id)}
+            delete={() => deleteMovie(movie._id)}
+            onLike={() => onLike(movie._id)}
             liked={movie.liked}
           />
         ))}
@@ -30,11 +32,23 @@ const movies = props => (
       </thead>
     </table>
     <Pagination
-      itemCount={props.itemCount}
-      pageSize={props.pageSize}
-      onPageChanged={props.onPageChanged}
+      itemCount={itemCount}
+      pageSize={pageSize}
+      onPageChanged={onPageChanged}
+      currentPage={currentPage}
     />
-  </React.Fragment>
-);
+  </React.Fragment>)
+};
+
+movies.propTypes = {
+  count: PropTypes.node,
+  deleteMovie: PropTypes.func.isRequired,
+  onLike: PropTypes.func.isRequired,
+  itemCount: PropTypes.number.isRequired,
+  pageSize: PropTypes.number.isRequired,
+  onPageChanged: PropTypes.func.isRequired,
+  currentPage: PropTypes.number.isRequired,
+  movies: PropTypes.array.isRequired,
+};
 
 export default movies;
