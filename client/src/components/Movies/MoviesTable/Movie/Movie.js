@@ -1,5 +1,5 @@
 import React from 'react';
-import Like from '../../Common/Like/Like';
+import Like from '../../../Common/Like/Like';
 
 const movie = (props) => {
   const {
@@ -23,7 +23,7 @@ const movie = (props) => {
       <td>
         <button
           onClick={props.delete}
-          className="btn btn-danger btn-sm"
+          className='btn btn-danger btn-sm'
         >
           Delete
         </button>

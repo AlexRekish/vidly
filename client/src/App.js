@@ -3,6 +3,7 @@ import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'font-awesome/css/font-awesome.min.css';
 import { getMovies } from './services/fakeMovieService';
+import { getGenres } from './services/fakeGenreService';
 import Movies from './components/Movies/Movies';
 import paginate from './utils/paginate';
 
@@ -12,10 +13,20 @@ const movies = getMovies().map(movie => {
 
 class App extends Component {
   state = {
-    movies,
+    movies: [],
+    genres: [],
+    selectedGenre: '',
     pageSize: 4,
     currentPage: 1,
   }
+
+  componentDidMount() {
+    this.setState({
+      movies,
+      genres: [{ name: 'All genres'}, ...getGenres()],
+    });
+  }
+
   deleteMovieHandler = (id) => {
     const updatedMovies = this.state.movies.slice();
     const index = updatedMovies.findIndex(movie => movie._id === id);
@@ -34,25 +45,35 @@ class App extends Component {
     this.setState({ currentPage: page });
   }
 
-  checkNumberOfMovies = () => {
-    if (!this.state.movies.length) return <p>There are no movies in the database</p>;
-    return <p>Showing {this.state.movies.length} movies in the database</p>;
+  genreSelectHandler = (genre) => {
+    this.setState({ selectedGenre: genre, currentPage: 1});
+  }
+
+  checkNumberOfMovies = (number) => {
+    if (!number) return <p>There are no movies in the database</p>;
+    return <p>Showing {number} movies in the database</p>;
   };
 
   render() {
-    const { movies: allMovies, pageSize, currentPage } = this.state;
-    const movies = paginate(allMovies, currentPage, pageSize);
+    const { movies: allMovies, pageSize, currentPage, genres, selectedGenre } = this.state;
+    const filtered = selectedGenre && selectedGenre._id
+      ? allMovies.filter(movie => selectedGenre._id === movie.genre._id)
+      : allMovies;
+    const movies = paginate(filtered, currentPage, pageSize);
     return (
-      <main className="container">
+      <main className='container'>
         <Movies
-          count={this.checkNumberOfMovies()}
+          count={this.checkNumberOfMovies(filtered.length)}
           movies={movies}
           deleteMovie={this.deleteMovieHandler}
           onLike={this.likeMovieHandler}
-          itemCount={allMovies.length}
+          itemCount={filtered.length}
           pageSize={pageSize}
           onPageChanged={this.pageChangeHandler}
           currentPage={currentPage}
+          items={genres}
+          onItemSelect={this.genreSelectHandler}
+          selectedItem={selectedGenre}
         />
       </main>
     );
