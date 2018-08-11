@@ -4,23 +4,38 @@ import Pagination from '../Common/Pagination/Pagination';
 import ListGroup from '../Common/ListGroup/ListGroup';
 import MoviesTable from './MoviesTable/MoviesTable';
 
-const movies = props => {
-  const {count, deleteMovie, onLike, itemCount, pageSize, onPageChanged, currentPage, movies} = props;
+const movies = ({
+    count,
+    onDelete,
+    onLike,
+    onSort,
+    itemCount,
+    pageSize,
+    onPageChanged,
+    currentPage,
+    movies,
+    items,
+    onItemSelect,
+    selectedItem,
+    sortColumn,
+  }) => {
   return (
   <div className='row'>
     <div className="col-3">
       <ListGroup
-        items={props.items}
-        onItemSelect={props.onItemSelect}
-        selectedItem={props.selectedItem}
-      />
+        items={items}
+        onItemSelect={onItemSelect}
+        selectedItem={selectedItem}
+        />
     </div>
     <div className='col'>
       {count}
       <MoviesTable
+        sortColumn={sortColumn}
         movies={movies}
-        onDelete={deleteMovie}
+        onDelete={onDelete}
         onLike={onLike}
+        onSort={onSort}
       />
       <Pagination
         itemCount={itemCount}
@@ -34,8 +49,9 @@ const movies = props => {
 
 movies.propTypes = {
   count: PropTypes.node,
-  deleteMovie: PropTypes.func.isRequired,
+  onDelete: PropTypes.func.isRequired,
   onLike: PropTypes.func.isRequired,
+  onSort: PropTypes.func.isRequired,
   itemCount: PropTypes.number.isRequired,
   pageSize: PropTypes.number.isRequired,
   onPageChanged: PropTypes.func.isRequired,

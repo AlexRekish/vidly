@@ -1,8 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const pagination = (props) => {
-  const { itemCount, pageSize, onPageChanged, currentPage } = props;
+const pagination = ({ itemCount, pageSize, onPageChanged, currentPage }) => {
   const itemCounts = Math.ceil(itemCount / pageSize);
   if (itemCounts === 1) return null;
   const pages = new Array(itemCounts).fill().map((page, index) => index + 1);

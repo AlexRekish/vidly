@@ -1,32 +1,41 @@
 import React from 'react';
-import Movie from './Movie/Movie';
+import Like from '../../Common/Like/Like';
+import Table from '../../Common/Table/Table';
 
-const moviesTable = (props) => {
-  const { movies, onDelete, onLike } = props;
+const moviesTable = ({ movies, onDelete, onLike, onSort, sortColumn }) => {
+  const columns = [
+    { path: 'title', label: 'Title'},
+    { path: 'genre.name', label: 'Genre'},
+    { path: 'numberInStock', label: 'Stock'},
+    { path: 'dailyRentalRate', label: 'Rate'},
+    {
+      key: 'like',
+      content: movie => (
+        <Like
+          onLike={() => onLike(movie)}
+          liked={movie.liked}
+      />)
+    },
+    {
+      key: 'delete',
+      content: movie => (
+        <button
+          onClick={() => onDelete(movie)}
+          className='btn btn-danger btn-sm'
+        >
+          Delete
+        </button>
+      )
+    },
+  ]
   return (
-    <table className='table'>
-      <tbody>
-        {movies.map(movie => (
-          <Movie
-            movie={movie}
-            key={movie._id}
-            onDelete={() => onDelete(movie._id)}
-            onLike={() => onLike(movie._id)}
-            liked={movie.liked}
-          />
-        ))}
-      </tbody>
-      <thead>
-        <tr>
-          <th>Title</th>
-          <th>Genre</th>
-          <th>Stock</th>
-          <th>Rate</th>
-          <th/>
-          <th/>
-        </tr>
-      </thead>
-    </table>);
+    <Table
+      data={movies}
+      onSort={onSort}
+      sortColumn={sortColumn}
+      columns={columns}
+    />
+);
 }
 
 export default moviesTable;
