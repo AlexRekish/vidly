@@ -5,8 +5,14 @@ import 'font-awesome/css/font-awesome.min.css';
 import { getMovies } from './services/fakeMovieService';
 import { getGenres } from './services/fakeGenreService';
 import Movies from './components/Movies/Movies';
+import Customers from './components/Customers/Customers';
+import Rentals from './components/Rentals/Rentals';
 import paginate from './utils/paginate';
+import NavBar from './components/NavBar/NavBar';
 import _ from 'lodash';
+import { Switch, Route, Redirect } from 'react-router-dom';
+import NotFound from './components/Common/NotFound/NotFound';
+import MovieForm from './components/Movies/MovieForm/MovieForm';
 
 const movies = getMovies().map(movie => {
   return { ...movie, liked: false };
@@ -91,23 +97,39 @@ class App extends Component {
     const { totalCount, data: movies} = this.getPagedData();
 
     return (
-      <main className='container'>
-        <Movies
-          count={this.checkNumberOfMovies(totalCount)}
-          movies={movies}
-          onDelete={this.deleteMovieHandler}
-          onLike={this.likeMovieHandler}
-          onSort={this.sortMovieHandler}
-          itemCount={totalCount}
-          pageSize={pageSize}
-          onPageChanged={this.pageChangeHandler}
-          currentPage={currentPage}
-          items={genres}
-          onItemSelect={this.genreSelectHandler}
-          selectedItem={selectedGenre}
-          sortColumn={sortColumn}
-        />
-      </main>
+      <React.Fragment>
+        <NavBar />
+        <main className='container p-4'>
+          <Switch>
+            <Route path='/movies/:id' component={MovieForm}/>
+            <Route path='/movies' render={
+              (props) => (
+                <Movies
+                  count={this.checkNumberOfMovies(totalCount)}
+                  movies={movies}
+                  onDelete={this.deleteMovieHandler}
+                  onLike={this.likeMovieHandler}
+                  onSort={this.sortMovieHandler}
+                  itemCount={totalCount}
+                  pageSize={pageSize}
+                  onPageChanged={this.pageChangeHandler}
+                  currentPage={currentPage}
+                  items={genres}
+                  onItemSelect={this.genreSelectHandler}
+                  selectedItem={selectedGenre}
+                  sortColumn={sortColumn}
+                  {...props}
+                />
+              )
+            }/>
+            <Route path='/customers' component={Customers}/>
+            <Route path='/rentals' component={Rentals}/>
+            <Route path='/not-found' component={NotFound}/>
+            <Redirect from='/' exact to='/movies'/>
+            <Redirect to='/not-found'/>
+          </Switch>
+        </main>
+      </React.Fragment>
     );
   }
 }
