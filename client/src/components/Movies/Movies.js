@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Pagination from '../Common/Pagination/Pagination';
 import ListGroup from '../Common/ListGroup/ListGroup';
@@ -29,6 +30,13 @@ const movies = ({
         />
     </div>
     <div className='col'>
+      <Link
+        to='/movies/new'
+        className='btn btn-primary'
+        style={{marginBottom: '10px'}}
+      >
+        New movie
+      </Link>
       {count}
       <MoviesTable
         sortColumn={sortColumn}

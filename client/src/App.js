@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import './App.css';
+import { Switch, Route, Redirect } from 'react-router-dom';
+import _ from 'lodash';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'font-awesome/css/font-awesome.min.css';
 import { getMovies } from './services/fakeMovieService';
@@ -9,14 +10,11 @@ import Customers from './components/Customers/Customers';
 import Rentals from './components/Rentals/Rentals';
 import paginate from './utils/paginate';
 import NavBar from './components/NavBar/NavBar';
-import _ from 'lodash';
-import { Switch, Route, Redirect } from 'react-router-dom';
 import NotFound from './components/Common/NotFound/NotFound';
 import MovieForm from './components/Movies/MovieForm/MovieForm';
-
-const movies = getMovies().map(movie => {
-  return { ...movie, liked: false };
-});
+import LoginForm from './components/LoginForm/LoginForm';
+import RegisterForm from './components/RegisterForm/RegisterForm';
+import './App.css';
 
 class App extends Component {
   state = {
@@ -33,7 +31,7 @@ class App extends Component {
 
   componentDidMount() {
     this.setState({
-      movies,
+      movies: getMovies(),
       genres: [{ _id: '', name: 'All genres'}, ...getGenres()],
     });
   }
@@ -101,6 +99,8 @@ class App extends Component {
         <NavBar />
         <main className='container p-4'>
           <Switch>
+            <Route path='/login' component={LoginForm}/>
+            <Route path='/register' component={RegisterForm}/>
             <Route path='/movies/:id' component={MovieForm}/>
             <Route path='/movies' render={
               (props) => (
