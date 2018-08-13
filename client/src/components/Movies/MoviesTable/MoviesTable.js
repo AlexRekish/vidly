@@ -2,8 +2,9 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import Like from '../../Common/Like/Like';
 import Table from '../../Common/Table/Table';
+import { getCurrentUser } from './../../../services/authService';
 
-const moviesTable = ({ movies, onDelete, onLike, onSort, sortColumn }) => {
+const MoviesTable = ({ movies, onDelete, onLike, onSort, sortColumn }) => {
   const columns = [
     {
       path: 'title',
@@ -22,7 +23,9 @@ const moviesTable = ({ movies, onDelete, onLike, onSort, sortColumn }) => {
           onLike={() => onLike(movie)}
           liked={movie.liked}
       />)
-    },
+    }
+  ];
+  if (getCurrentUser() && getCurrentUser().isAdmin) columns.push(
     {
       key: 'delete',
       content: movie => (
@@ -33,8 +36,7 @@ const moviesTable = ({ movies, onDelete, onLike, onSort, sortColumn }) => {
           Delete
         </button>
       )
-    },
-  ]
+    });
   return (
     <Table
       data={movies}
@@ -45,4 +47,4 @@ const moviesTable = ({ movies, onDelete, onLike, onSort, sortColumn }) => {
 );
 }
 
-export default moviesTable;
+export default MoviesTable;

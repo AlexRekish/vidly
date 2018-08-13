@@ -9,7 +9,7 @@ const validator = require('../middleware/validate');
 const router = express.Router();
 
 router.get('/', async (req, res) => {
-  const movies = await Movie.find().sort({ name: 1 });
+  const movies = await Movie.find().sort({ title: 1 });
   return res.send(movies);
 });
 
@@ -25,7 +25,7 @@ router.post('/', [auth, validator(validate)], async (req, res) => {
   if (!genre) return res.status(400).send('Invalid genre!');
 
   let movie = new Movie({
-    title: req.body.name,
+    title: req.body.title,
     genre: {
       _id: genre._id,
       name: genre.name,
@@ -38,11 +38,11 @@ router.post('/', [auth, validator(validate)], async (req, res) => {
 });
 
 router.put('/:id', [auth, admin, validateObjectId, validator(validate)], async (req, res) => {
-  const genre = Genre.findById(req.body.genreId);
+  const genre = await Genre.findById(req.body.genreId);
   if (!genre) return res.status(400).send('Invalid genre');
 
   const movie = await Movie.findByIdAndUpdate(req.params.id, {
-    title: req.body.name,
+    title: req.body.title,
     genre: {
       _id: genre._id,
       name: genre.name,

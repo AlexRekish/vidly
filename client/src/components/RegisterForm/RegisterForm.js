@@ -1,6 +1,8 @@
 import React from 'react';
 import Joi from 'joi-browser';
 import Form from '../Common/Form/Form';
+import { register } from '../../services/usersService';
+import { loginWithJwt } from './../../services/authService';
 
 class RegisterForm extends Form {
   state = {
@@ -14,13 +16,13 @@ class RegisterForm extends Form {
 
   schema = {
     username: Joi.string()
-      .min(3)
+      .min(5)
       .max(50)
       .email()
       .required()
       .label('Username'),
     password: Joi.string()
-      .min(5)
+      .min(10)
       .max(30)
       .required()
       .label('Password'),
@@ -31,8 +33,18 @@ class RegisterForm extends Form {
       .label('Name')
   };
 
-  onSubmitted = () => {
-    console.log('registered')
+  onSubmitted = async () => {
+    try {
+      const res = await register(this.state.data);
+      loginWithJwt(res);
+      window.location = '/';
+    } catch (err) {
+      if (err.response && err.response.status === 400) {
+        const errors = { ...this.state.errors };
+        errors.username = err.response.data;
+        this.setState({ errors });
+      }
+    }
   }
 
   render() {

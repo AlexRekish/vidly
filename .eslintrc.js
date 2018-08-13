@@ -6,7 +6,9 @@ module.exports = {
       'func-names': 'off',
       'consistent-return': 'off',
       'no-console': 'off',
-      'global-require': 'off'
+      'global-require': 'off',
+      'no-restricted-syntax': 'off',
+      'no-await-in-loop': 'off'
     },
     "env": {
       "jest": true

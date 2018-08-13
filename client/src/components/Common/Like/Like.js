@@ -1,6 +1,6 @@
 import React from 'react';
 
-const like = ({ liked, onLike }) => {
+const Like = ({ liked, onLike }) => {
   const heartCode = liked ? 'fa fa-heart clickable' : 'fa fa-heart-o clickable';
   return (
       <i
@@ -10,4 +10,4 @@ const like = ({ liked, onLike }) => {
    );
 }
 
-export default like;
+export default Like;

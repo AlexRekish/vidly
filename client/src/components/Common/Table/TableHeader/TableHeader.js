@@ -1,6 +1,6 @@
 import React from 'react';
 
-const tableHeader = ({ sortColumn, onSort, columns }) => {
+const TableHeader = ({ sortColumn, onSort, columns }) => {
   const switchSortOrder = (path) => {
     const newSortColumn = { ...sortColumn
     };
@@ -37,4 +37,4 @@ const tableHeader = ({ sortColumn, onSort, columns }) => {
     );
 }
 
-export default tableHeader;
+export default TableHeader;
